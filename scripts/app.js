@@ -38,9 +38,7 @@ var updateNums = (row, col, num) => {
     nums[row][col] = num;
 
     var $num = $('.' + `t${row}${col}`);
-    $num.text(num > 0
-        ? num
-        : '');
+    $num.text(num > 0 ? num : '');
     $num.removeAttr('id');
     $num.attr('id', `num-${num}`);
     $num.css('font-size', fontSize[String(num).length - 1]);
