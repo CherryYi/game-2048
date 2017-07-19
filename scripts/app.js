@@ -23,9 +23,7 @@ var initNums = () => {
     console.log(nums);
     let row = parseInt(Math.random() * 100) % COUNT;
     let col = parseInt(Math.random() * 100) % COUNT;
-    nums[row][col] = Math.random() > 0.5
-        ? 4
-        : 2;
+    nums[row][col] = Math.random() > 0.5 ? 4 : 2;
 
     // 测试的话，随机多填一些数字,如果完成了开发注释掉即可
     nums.forEach((a, row) => {
@@ -40,9 +38,7 @@ var updateNums = (row, col, num) => {
     nums[row][col] = num;
 
     var $num = $('.' + `t${row}${col}`);
-    $num.text(num > 0
-        ? num
-        : '');
+    $num.text(num > 0 ? num : '');
     $num.removeAttr('id');
     $num.attr('id', `num-${num}`);
     $num.css('font-size', fontSize[String(num).length - 1]);
@@ -71,9 +67,7 @@ var randNum = () => {
     if (emptyPos.length > 0) {
         var index = parseInt(Math.random() * 100) % emptyPos.length
         var pos = emptyPos[index];
-        updateNums(pos.row, pos.col, (index % 2)
-            ? (2)
-            : (4));
+        updateNums(pos.row, pos.col, (index % 2) ? (2) : (4));
         success = true;
     } else {
         // 判断一下游戏还能不能进行操作，如果不能操作返回false
