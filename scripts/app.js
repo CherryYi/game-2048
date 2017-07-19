@@ -130,10 +130,52 @@ var left = () => {
 
 var up = () => {
     // 向上按键逻辑
+    for (let col = 0; col < COUNT; col++) {
+        let merge = false;
+        // 如果有数字相同，先合并
+        for (let row = 0; row < COUNT - 1 && (!merge); row++) {
+            let curNum = nums[row][col];
+            if (curNum > 0) {
+                let gap = false;
+                for (let next = row + 1; next < COUNT; next++) {
+                    let nextNum = nums[next][col];
+                    if (curNum === nextNum && (!gap)) {
+                        updateNums(row, col, curNum * 2);
+                        updateNums(next, col, 0);
+                        merge = true;
+                        break;
+                    } else {
+                        gap = nextNum > 0;
+                    }
+                }
+            }
+        }
+        // 合并完成，将数字掉落到正确的位置
+        for (let row = 0; row < COUNT; row++) {
+            let curNum = nums[row][col];
+            if (curNum > 0) {
+                let dropIndex = -1;
+                for (let next = row - 1; next >= 0; next--) {
+                    let nextNum = nums[next][col];
+                    if (nextNum === 0) {
+                        dropIndex = next;
+                    } else {
+                        break;
+                    }
+                }
+                if (dropIndex >= 0) {
+                    updateNums(row, dropIndex, curNum);
+                    updateNums(row, col, 0);
+                }
+            }
+        }
+    }
+
 }
 
 var right = () => {
     // 向右按键逻辑
+
 }
 
 var down = () => {
