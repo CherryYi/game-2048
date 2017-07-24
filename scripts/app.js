@@ -20,17 +20,16 @@ var initNums = () => {
         nums[i] = new Array(COUNT);
         nums[i].fill(0);
     }
-    console.log(nums);
     let row = parseInt(Math.random() * 100) % COUNT;
     let col = parseInt(Math.random() * 100) % COUNT;
-    nums[row][col] = Math.random() > 0.5 ? 4 : 2;
+    nums[row][col] = Math.random() < 0.1 ? 4 : 2;
 
     // 测试的话，随机多填一些数字,如果完成了开发注释掉即可
-    nums.forEach((a, row) => {
-        a.forEach((b, col) => {
-            nums[row][col] = Math.pow(2, parseInt(Math.random() * 10) + 1);
-        })
-    })
+    // nums.forEach((a, row) => {
+    //     a.forEach((b, col) => {
+    //         nums[row][col] = Math.pow(2, parseInt(Math.random() * 10) + 1);
+    //     })
+    // })
 };
 
 // 更新数字
@@ -73,6 +72,33 @@ var randNum = () => {
         // 判断一下游戏还能不能进行操作，如果不能操作返回false
     }
     return success;
+}
+
+// 对数组顺时针旋转n次操作
+var rotateNums = (n) => {
+    n = n % 4;
+    if (n === 0) return;
+    var numsTemp = [];
+    numsTemp = new Array(COUNT);
+    for (var row = 0; row < numsTemp.length; row++) {
+        numsTemp[row] = new Array(COUNT);
+    }
+    // 旋转90°
+    // 1 2 3       7 4 1
+    // 4 5 6  -->  8 5 2
+    // 7 8 9       9 6 3
+    var dst = COUNT - 1; // 这里我们从目标矩阵的最后一列开始存放数据
+    for (var row = 0; row < COUNT; row++, dst--)
+        for (var col = 0; col < COUNT; col++)
+            numsTemp[col][dst] = nums[row][col];
+
+    // 拷贝回原数组
+    for (var row = 0; row < COUNT; row++)
+        for (var col = 0; col < COUNT; col++)
+            nums[row][col] = numsTemp[row][col];
+
+    // 继续旋转
+    rotateNums(n - 1);
 }
 
 // 处理游戏结束状态
@@ -122,30 +148,26 @@ var left = () => {
     }
 }
 
-var up = () => {
-    // 向上按键逻辑
-}
-
-var right = () => {
-    // 向右按键逻辑
-}
-
-var down = () => {
-    // 向下按键逻辑
+var move = (rotate) => {
+    // console.log('rotate = ' + rotate);
+    rotateNums(rotate); // 旋转数组
+    left();             // 执行左操作
+    rotateNums(4-rotate);// 旋转回去
+    paintNums();    // 渲染数字到页面
 }
 
 // 处理按键
 document.onkeydown = (e) => {
+    // 每个操作通过旋转数组之后，转为对左的操作。
     var f = {
-        '37': left,
-        '38': up,
-        '39': right,
-        '40': down
+        '37': 0,    // ←
+        '38': 3,    // ↑
+        '39': 2,    // →
+        '40': 1     // ↓
     };
 
-    f[e.keyCode] && f[e.keyCode]();
-
-    if (f[e.keyCode]) {
+    if (f[e.keyCode] !== undefined) {
+        move(f[e.keyCode]);
         if (!randNum()) {
             gameOver();
         }
