@@ -66,7 +66,7 @@ var randNum = () => {
     if (emptyPos.length > 0) {
         var index = parseInt(Math.random() * 100) % emptyPos.length
         var pos = emptyPos[index];
-        updateNums(pos.row, pos.col, (index % 2) ? (2) : (4));
+        updateNums(pos.row, pos.col, Math.random() < 0.1 ? (4) : (2));
         success = true;
     } else {
         // 判断一下游戏还能不能进行操作，如果不能操作返回false
